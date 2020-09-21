@@ -1,0 +1,39 @@
+- id: letsencrypt-renewal
+  alias: Let's Encrypt Renewal
+  trigger:
+  - platform: time
+    at: 00:00:00
+  action:
+  - service: hassio.addon_restart
+    data:
+      addon: core_letsencrypt
+- alias: Perform Weekly Backup
+  trigger:
+    platform: time
+    at: 02:30:00
+  condition:
+    condition: time
+    weekday:
+    - mon
+  action:
+    service: auto_backup.snapshot_full
+    data_template:
+      name: 'WeeklyBackup: {{ now().strftime(''%A, %B %-d, %Y'') }}'
+      keep_days: 28
+  id: 62a736e06e4d415a88a5ac7284a1158d
+- id: '1600551763871'
+  alias: Bouton Poteau
+  description: ''
+  trigger:
+  - platform: device
+    domain: mqtt
+    device_id: ff73c712cecd49d89093c14b93a3dc16
+    type: action
+    subtype: single
+    discovery_id: 0x00158d00013f9acf action_single
+  condition: []
+  action:
+  - type: toggle
+    entity_id: light.salon
+    domain: light
+  mode: single

@@ -1,0 +1,109 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+history:
+
+# Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+http:
+  server_port: 443
+  ssl_certificate: /ssl/fullchain.pem
+  ssl_key: /ssl/privkey.pem
+
+
+emulated_hue:
+  listen_port: 8008
+  expose_by_default: true
+  exposed_domains:
+    - light
+    
+recorder:
+  purge_keep_days: 5
+  db_url: !secret db_url
+#  keep_days: 5
+#  repack: true
+
+# http:
+#   base_url: example.duckdns.org:8123
+homeassistant:
+  packages: !include_dir_named packages
+  external_url: https://hass.famillegros.com
+
+# Text to speech
+tts:
+  - platform: google_translate
+    language: 'fr'
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+google_assistant:
+  project_id: glossy-odyssey-261115
+  service_account: !include SERVICE_ACCOUNT.JSON
+  report_state: true
+  expose_by_default: true
+  exposed_domains:
+    - switch
+    - light
+    - sensor
+
+mqtt:
+  broker: core-mosquitto # This will have to be your mqtt broker, Mosquitto addon is recommended.
+  discovery: true
+
+light:
+  - platform: mqtt
+    schema: json
+    name: entree
+    command_topic: "zigbee2mqtt/Groupe_Entree/set"
+    state_topic: "zigbee2mqtt/Groupe_Entree"
+    color_temp: true
+    brightness: true
+    rgb: true
+  - platform: mqtt
+    schema: json
+    name: salon
+    command_topic: "zigbee2mqtt/Groupe_Salon/set"
+    state_topic: "zigbee2mqtt/Groupe_Salon"
+    color_temp: true
+    brightness: true
+    rgb: true
+  - platform: mqtt
+    schema: json
+    name: jardin
+    command_topic: "zigbee2mqtt/Groupe_Jardin/set"
+    state_topic: "zigbee2mqtt/Groupe_Jardin"
+    color_temp: true
+    brightness: true
+    rgb: true
+  - platform: mqtt
+    schema: json
+    name: appenti
+    command_topic: "zigbee2mqtt/Groupe_Appenti/set"
+    state_topic: "zigbee2mqtt/Groupe_Appenti"
+    color_temp: true
+    brightness: true
+    rgb: true
+
+device_tracker:
+  - platform: traccar
+    host: a0d7b954-traccar
+    port: 80
+    username: admin
+    password: admin
+    event: all_events
+    new_device_defaults:
+      track_new_devices: true
+
+meteo_france:
+  - city: '79000'
+        
+  
+#badnest:
+#  issue_token: "https://accounts.google.com/o/oauth2/iframerpc?action=issueToken&response_type=token%20id_token&login_hint=AJDLj6KSKglV05YHDuw4j-Ml9DomrIyuZJFH4JGuF_LESsQADp-DANMw2_iBJFkZ5wnTUS55y7GFvexVqYBDV3Lcf1zJS4WbRQ&client_id=384529615266-p0i7v1chkddii3nhg8karobhfbvvnnp2.apps.googleusercontent.com&origin=https%3A%2F%2Fhome.ft.nest.com&scope=openid%20profile%20email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fnest-account&ss_domain=https%3A%2F%2Fhome.ft.nest.com"
+#  cookie: "SMSV=ADHTe-DZB2LwFeoZUEIeD8JvtP1M0OXMpnlhgVAQI6GmHZNh7WZT9PlUlS69q1tZZfZR4jLXmSwAg5vNCXzbwGOiMdFRNhPo1-hxhok2_rL12-Y7zR530D0; SID=vwcbZTrAzN8XMImU9pYh8FzIf87oNUOBfnXVO6HqbK9wDoTWRMQ5tJRW3aC0j-3_7UuIwQ.; __Secure-3PSID=vwcbZTrAzN8XMImU9pYh8FzIf87oNUOBfnXVO6HqbK9wDoTWmbOpRfX53jHlo03vd7D6vA.; HSID=AoswfksuVKnm04lRy; SSID=AYbHAWidcOEEMbWBW; APISID=iJ484GyS9UqzO211/A-9-AFIRoHlZffSLd; SAPISID=n5mJUwNHu94_FX0B/A4hFxg6r0JamImxRy; __Secure-HSID=AoswfksuVKnm04lRy; __Secure-SSID=AYbHAWidcOEEMbWBW; __Secure-APISID=iJ484GyS9UqzO211/A-9-AFIRoHlZffSLd; __Secure-3PAPISID=n5mJUwNHu94_FX0B/A4hFxg6r0JamImxRy; NID=202=nldf624F9K8KQm948cZCtAa8LnBMyQQjgXX6UxgYWn_ubpAUyQzblxZQ1ANs6lV47-1nNQ438Ub8y6vlZtsUeUEQIPi9D0RlTieiDa22IGDj1k5D7qmi3pCOWXUZamg1_jx9vcCSevX-XTXgUJ1MjgoVnX_t1XQgPDnFIEv1FrbOVgqPrZil_sZ6BF5fw9BEcAkGNWuF2lPGLkjN; CONSENT=YES+FR.fr+20151207-13-0; user_id=111309407284937148932; LSID=lso|s.FR|s.youtube:vwcbZZ-Ta2QQWJ0QH72Lo3sOqLam0z3nE5tAW52DuRDEmn9I4imCenUKu1tE0LTjCFvvdw.; __Host-3PLSID=lso|s.FR|s.youtube:vwcbZZ-Ta2QQWJ0QH72Lo3sOqLam0z3nE5tAW52DuRDEmn9IEtwG5Rb4rtWij9GBYHoj7w.; ACCOUNT_CHOOSER=AFx_qI6RIMbYDZpYTCBDj-Y6aPzdrzB5XAensEnyANTAxCBLm27Z9EnjsG6Tq0XwZhkmoRF8-Ds5ScAoWgHajWc46XhzjqHS5sQEHD1RMrLwNbLyc_POOPYfewlN38clsbp27YIYBYZfvzdu6S7C_9faWfcAECR-yg; GAPS=1:EZKQR8ICF_yooJSlBkQTXxG2444-cOvtZNmUdxKLQBLDq3w04luRuJa7Nw7xH6W8-0s3W7V7NcI55Lq_rj4VCGiekML0rQ:2gjV3LvLa3RkK2dL; SIDCC=AJi4QfEhBRNw92_p6zBas8EzkTdam5CAHwCyoWh1otNhMidTPeIQQZy2oYv0kyw1CrxCn-8y"
+#  region: us
+
+# Autobackup
+auto_backup:
+  auto_purge: true
