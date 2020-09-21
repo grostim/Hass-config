@@ -1,0 +1,30 @@
+light:
+  - platform: mqtt
+    schema: json
+    name: entree
+    command_topic: "zigbee2mqtt/Groupe_Entree/set"
+    state_topic: "zigbee2mqtt/Groupe_Entree"
+    color_temp: true
+    brightness: true
+    rgb: true
+  - platform: mqtt
+    schema: json
+    name: salon
+    command_topic: "zigbee2mqtt/Groupe_Salon/set"
+    state_topic: "zigbee2mqtt/Groupe_Salon"
+    color_temp: true
+    brightness: true
+    rgb: true
+  - platform: mqtt
+    schema: json
+    name: jardin
+    command_topic: "zigbee2mqtt/Groupe_Jardin/set"
+    state_topic: "zigbee2mqtt/Groupe_Jardin"
+    color_temp: true
+    brightness: true
+    rgb: true
+  - platform: mqtt
+    schema: json
+    name: appenti
+    command_topic: "zigbee2mqtt/Groupe_Appenti/set"
+    state_topic: "zigbee2mqtt/Groupe_Appenti"
